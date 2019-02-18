@@ -4,6 +4,7 @@
   "description": "Una aplicación para chatear usando express, mongoose y socket.io",
   "main": "index.js",
   "scripts": {
+    "start": "node ./server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Facundo Tourn",
@@ -16,5 +17,8 @@
     "mongoose": "^5.4.13",
     "socket.io": "^2.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines" {
+    "node": "10.x"
+  }
 }
