@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat App</title>
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="index.css">
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="socket.io.js"></script>
+</head>
+<body>
+    <div class="hache-chat">
+        <h2 class="h2">Hache chat</h2>
+        <div id="chat-window">
+            <div id="messages">
+
+            </div>
+            <div id="feedback">
+
+            </div>
+        </div>
+        <input type="text" id="name" class="form-control" placeholder="Nombre">
+        <input id="message" class="form-control" placeholder="Mensaje"></input>
+        <button id="send" class="btn btn-success">Enviar</button>
+    </div>
+    <script>
+        var url = 'http://localhost:4000'
+        getMessages();
+
+        $(() => {
+            $('#send').click(() => {
+                sendMessage({
+                    name: $('#name').val(),
+                    message: $('#message').val(),
+                    postedAt: Date.now()
+                })
+                $('#message').val('');  
+            })
+        });
+
+        var socket = io.connect(url);
+        socket.on('message', addMessage);
+
+        function addMessage(message) {
+            $('#messages').append(`
+                <p><strong>${message.name}</strong>: ${message.message}</p>`
+            );
+        }
+
+        function loadMessages(messages) {
+            $.each(messages, (index, item) => {
+                $('#messages').prepend(`
+                    <p><strong>${item.name}</strong>: ${item.message}</p>
+                `)
+            })
+        }
+
+        function getMessages() {
+            $.get(url + '/messages', (data) => {
+                console.log(data);
+                loadMessages(data);
+            });
+        }
+
+        function sendMessage(message) {
+            $.post(url + '/messages', message);
+        }
+    </script>
+</body>
+</html>
