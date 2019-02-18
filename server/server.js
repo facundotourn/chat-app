@@ -5,11 +5,12 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const PORT = process.env.PORT || 4000
 
 // Middleware
-app.use(express.static(__dirname + '\\..\\client'));
+app.use(express.static((path.resolve(__dirname + '/../client'))));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
